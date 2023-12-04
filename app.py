@@ -8,7 +8,7 @@ import re
 app = Flask(__name__)
 
 
-def processing():
+def processing(text):
     #this is the function where to preprocess and import pkl model
     a= 12
 
