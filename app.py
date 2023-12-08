@@ -4,13 +4,21 @@ from flask_cors import cross_origin
 from bs4 import BeautifulSoup
 import requests
 import re
+from transformers import pipeline
 
 app = Flask(__name__)
 
+summarizer = pipeline("summarization", model=model, tokenizer=tokenizer, framework="tf")
 
 def processing(text):
     model_path = "../path"
     tokenizer_path = "../path/to/tokenizer"
+    summary = summarizer(
+        text,
+        min_length=5,
+        max_length=128,
+    )
+    return summary[0]["summary_text"]
 
 @app.route("/api/fromnews", methods=["POST"])
 @cross_origin() 
@@ -45,6 +53,7 @@ def fromtext():
     #just process it, do we need to preprocess it?
     data = request.get_json()
     full_text = data["full_text"]
+    return jsonify({"full_text": full_text, "summarize" : processing(full_text)})
 
 
 
