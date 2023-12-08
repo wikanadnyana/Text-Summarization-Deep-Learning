@@ -4,21 +4,26 @@ from flask_cors import cross_origin
 from bs4 import BeautifulSoup
 import requests
 import re
-from transformers import pipeline
+import torch
+from transformers import T5ForConditionalGeneration, T5Tokenizer
 
 app = Flask(__name__)
 
-summarizer = pipeline("summarization", model=model, tokenizer=tokenizer, framework="tf")
+def summarize_text(model, tokenizer, text):
+    # Tokenize and generate summary
+    input_ids = tokenizer.encode("summarize: " + text, return_tensors="pt", max_length=512, truncation=True)
+    output = model.generate(input_ids, max_length=150, num_beams=2, length_penalty=2.0, early_stopping=True)
+    generated_summary = tokenizer.decode(output[0], skip_special_tokens=True)
+    return generated_summary
 
 def processing(text):
-    model_path = "../path"
-    tokenizer_path = "../path/to/tokenizer"
-    summary = summarizer(
-        text,
-        min_length=5,
-        max_length=128,
-    )
-    return summary[0]["summary_text"]
+    model = T5ForConditionalGeneration.from_pretrained("./model")
+    tokenizer = T5Tokenizer.from_pretrained("./model")
+    full_text = [text]
+    for idx, news_text in enumerate(full_text, start=1):
+        generated_summary = summarize_text(model, tokenizer, news_text)
+    
+    return generated_summary
 
 @app.route("/api/fromnews", methods=["POST"])
 @cross_origin() 
