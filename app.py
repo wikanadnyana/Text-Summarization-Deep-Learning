@@ -6,6 +6,8 @@ import requests
 import re
 import torch
 from transformers import T5ForConditionalGeneration, T5Tokenizer
+import requests
+import re
 
 app = Flask(__name__)
 
@@ -30,7 +32,7 @@ def processing(text):
 def fromnews():
     data = request.get_json()
     #validation to check wheter request is bbc news using regex
-    pattern = re.compile(r'bbc\.com', re.IGNORECASE)
+    pattern = re.compile(r'bbc\.com/news', re.IGNORECASE)
     match = re.search(pattern, data["full_link"])
     validating_bbc = bool(match)
     if not validating_bbc :
@@ -41,16 +43,20 @@ def fromnews():
     if respon.status_code != 200 :
         return jsonify({"message": "News not found"}), 404
     
-    #using beautifulsoup to scrape news 
+    #using beautifulsoup to scrape news
+    url = data["full_link"]
+    response = requests.get(url)
+    html = response.text
 
+    soup = BeautifulSoup(html, 'html.parser')
+    div_elements = soup.find_all('div', {'class': 'ssrcss-11r1m41-RichTextComponentWrapper ep2nwvo0'})
 
-    #concating the block
+    text_data = ' '.join(div.find('p').get_text(strip=True) for div in div_elements)
 
-    #returning the full text
+    preprocessed_text = re.sub(r"['\"]", '', text_data)
 
-    #processing the text
-    
-    return jsonify({"message": "News found and processed"})
+    truncated_text = preprocessed_text[:512]
+    return jsonify({"full text": truncated_text})
 
 @app.route("/api/fromtext", methods=["POST"])
 @cross_origin()
