@@ -62,7 +62,10 @@ def fromnews():
             truncated_text += sentence
         else:
             break
+    
+    
     return jsonify({"full text": truncated_text})
+
 
 @app.route("/api/fromtext", methods=["POST"])
 @cross_origin()
