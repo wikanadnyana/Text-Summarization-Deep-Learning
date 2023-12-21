@@ -63,8 +63,8 @@ def fromnews():
         else:
             break
     
-    
-    return jsonify({"full text": truncated_text})
+
+    return jsonify({"full text": truncated_text, "summarize" : processing(truncated_text)})
 
 
 @app.route("/api/fromtext", methods=["POST"])
