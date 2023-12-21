@@ -51,11 +51,17 @@ def fromnews():
     soup = BeautifulSoup(html, 'html.parser')
     div_elements = soup.find_all('div', {'class': 'ssrcss-11r1m41-RichTextComponentWrapper ep2nwvo0'})
 
-    text_data = ' '.join(div.find('p').get_text(strip=True) for div in div_elements)
-
+    text_data = ' '.join(div.find('p').get_text(strip=True) if div.find('p') else '' for div in div_elements)
     preprocessed_text = re.sub(r"['\"]", '', text_data)
 
-    truncated_text = preprocessed_text[:512]
+    sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', preprocessed_text)
+    truncated_text = ''
+
+    for sentence in sentences:
+        if len(truncated_text) + len(sentence) <= 512:
+            truncated_text += sentence
+        else:
+            break
     return jsonify({"full text": truncated_text})
 
 @app.route("/api/fromtext", methods=["POST"])
