@@ -3,6 +3,7 @@ from flask_cors import cross_origin
 from bs4 import BeautifulSoup
 import requests
 import re
+import time
 
 
 app = Flask(__name__)
@@ -13,6 +14,10 @@ headers = {"Authorization": "Bearer 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"}
 def query(payload):
 	response = requests.post(API_URL, headers=headers, json=payload)
 	return response.json()
+
+def is_model_ready():
+    response = requests.get(API_URL)
+    return response.status_code == 200
 
 
 @app.route("/api/fromnews", methods=["POST"])
@@ -51,6 +56,10 @@ def fromnews():
         else:
             break
     
+    while not is_model_ready():
+        print("Model is still initializing. Waiting for 2 seconds...")
+        time.sleep(2)
+    
     output = query({
 	"inputs": truncated_text,
     })
@@ -63,8 +72,12 @@ def fromtext():
     #just process it, do we need to preprocess it?
     data = request.get_json()
     full_text = data["full_text"]
+    truncated_text = ' '.join(full_text.split()[:512])
+    while not is_model_ready():
+        print("Model is still initializing. Waiting for 2 seconds...")
+        time.sleep(2)
     output = query({
-	"inputs": full_text,
+	"inputs": truncated_text,
     })
     return jsonify({"full_text": full_text, "summarize" : output[0]["summary_text"]})
 
