@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>BBC News Summarization App</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="js/scripts.js" defer></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+  </head>
+  <body>
+    <!-- Responsive navbar-->
+    <div class="loading-background"></div>
+    <img class="loading" src="loading.svg" alt="" />
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img
+            src="bbc-logo.png"
+            width="30"
+            height="30"
+            class="d-inline-block align-top"
+            alt=""
+          />
+          BBC News Summarization
+        </a>
+      </div>
+    </nav>
+    <!-- Page content-->
+    <div class="container">
+      <div class="text-center mt-5 mb-5">
+        <h1>BBC News Summarization</h1>
+        <p class="lead">Automatically generates BBC News summaries</p>
+      </div>
+
+      <div class="m-3">
+        <div class="dropdown">
+          <button
+            class="btn btn-secondary dropdown-toggle"
+            type="button"
+            id="dropdownMenuButton1"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Input Options
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="index.html">News Link</a></li>
+            <li>
+              <a class="dropdown-item" href="textinput.html">Text Input</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="m-3">
+            <form id="inputForm">
+              <div class="form-group">
+                <label for="exampleFormControlTextarea1">Text Input</label>
+                <textarea
+                  type="text"
+                  class="form-control"
+                  id="textInput"
+                  rows="15"
+                ></textarea>
+                <p id="tess"></p>
+              </div>
+              <button
+                type="button"
+                class="btn btn-primary mt-3"
+                onclick="generateSummary()"
+              >
+                Generate
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="m-3">
+            <form>
+              <div class="form-group">
+                <label for="exampleFormControlTextarea1">Result</label>
+                <textarea
+                  class="form-control"
+                  id="resultTextarea"
+                  rows="15"
+                  disabled
+                  readonly
+                ></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="bg-dark text-white text-center p-3 mt-5">
+      <p>&copy; 2023 Ayulia | Darryl | Wikan | Hrida</p>
+    </footer>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+  </body>
+</html>
