@@ -9,7 +9,7 @@ import time
 app = Flask(__name__)
 
 API_URL = "https://api-inference.huggingface.co/models/ayuliasw/summarization-t5"
-headers = {"Authorization": "Bearer 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"}
+headers = {"Authorization": "YOUR_AUTH_BEARER"}
 
 def query(payload):
 	response = requests.post(API_URL, headers=headers, json=payload)
